@@ -1,0 +1,35 @@
+{
+  "name": "discover_media",
+  "description": "Discover trending, upcoming, and popular movies and TV shows. Supports filtering by genre, network, studio, and language.",
+  "entrypoint": "run.py",
+  "parameters": {
+    "category": {
+      "type": "string",
+      "description": "What to discover: 'trending', 'movies', 'movies_upcoming', 'tv', or 'tv_upcoming'."
+    },
+    "genre": {
+      "type": "integer",
+      "description": "Genre ID to filter by (for 'movies' or 'tv' categories)."
+    },
+    "network": {
+      "type": "integer",
+      "description": "Network ID to filter by (for 'tv' category only, e.g. 213 for Netflix, 49 for HBO)."
+    },
+    "studio": {
+      "type": "integer",
+      "description": "Studio ID to filter by (for 'movies' category only, e.g. 420 for Marvel Studios)."
+    },
+    "language": {
+      "type": "string",
+      "description": "ISO 639-1 language code to filter by (for 'movies' category only, e.g. 'ko', 'en')."
+    },
+    "sort_by": {
+      "type": "string",
+      "description": "Sort criteria for 'movies' category (e.g. 'popularity.desc')."
+    },
+    "page": {
+      "type": "integer",
+      "description": "Page number for results."
+    }
+  }
+}
