@@ -34,7 +34,11 @@ def main() -> None:
     query = params["query"]
     page = params.get("page", 1)
 
-    query_string = urllib.parse.urlencode({"query": query, "page": page})
+    # urlencode defaults to encoding spaces as '+', which the Seerr API rejects.
+    # quote_via=urllib.parse.quote produces percent-encoded spaces (%20) instead.
+    query_string = urllib.parse.urlencode(
+        {"query": query, "page": page}, quote_via=urllib.parse.quote
+    )
     path = f"/api/v1/search?{query_string}"
 
     result = call_seerr_api(api_url, api_key, path)
