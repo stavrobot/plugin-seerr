@@ -12,7 +12,7 @@ A [Stavrobot](https://github.com/stavrobot) plugin for managing media requests v
 
 Ask Stavrobot to install the plugin:
 
-> Install the plugin https://github.com/stavrobot/seerr-plugin.git
+> Install the plugin https://github.com/stavrobot/plugin-seerr.git
 
 Stavrobot will ask you to configure the plugin with your seerr instance URL and API key. You can find your API key in the seerr UI under Settings > General.
 
