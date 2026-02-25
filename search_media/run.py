@@ -25,6 +25,68 @@ def call_seerr_api(api_url: str, api_key: str, path: str) -> dict:
         sys.exit(1)
 
 
+MEDIA_STATUS_CODES: dict[int, str] = {
+    1: "unknown",
+    2: "pending",
+    3: "processing",
+    4: "partially_available",
+    5: "available",
+}
+
+
+def clean_result(result: dict) -> dict:
+    media_type = result.get("mediaType", "")
+    if media_type == "person":
+        return {
+            "id": result["id"],
+            "media_type": "person",
+            "title": result.get("name", ""),
+        }
+
+    if media_type == "movie":
+        title = result.get("title", "")
+        date_key = "release_date"
+        date_value = result.get("releaseDate", "")
+    elif media_type == "tv":
+        title = result.get("name", "")
+        date_key = "first_air_date"
+        date_value = result.get("firstAirDate", "")
+    else:
+        return {
+            "id": result["id"],
+            "media_type": media_type,
+            "title": result.get("name", result.get("title", "")),
+        }
+
+    cleaned: dict = {
+        "id": result["id"],
+        "media_type": media_type,
+        "title": title,
+        "overview": result.get("overview", ""),
+        date_key: date_value,
+        "vote_average": result.get("voteAverage"),
+    }
+
+    media_info = result.get("mediaInfo")
+    if media_info is not None:
+        status_code = media_info.get("status")
+        if status_code is not None:
+            cleaned["status"] = MEDIA_STATUS_CODES.get(
+                status_code, f"unknown ({status_code})"
+            )
+
+    return cleaned
+
+
+def clean_response(raw: dict) -> dict:
+    return {
+        "page": raw.get("page"),
+        "total_pages": raw.get("totalPages"),
+        "total_results": raw.get("totalResults"),
+        "results": [clean_result(r) for r in raw.get("results", [])],
+    }
+
+
 def main() -> None:
     config = json.loads(Path("../config.json").read_text())
     api_url = config["api_url"].rstrip("/")
@@ -41,8 +103,8 @@ def main() -> None:
     )
     path = f"/api/v1/search?{query_string}"
 
-    result = call_seerr_api(api_url, api_key, path)
-    json.dump(result, sys.stdout)
+    raw = call_seerr_api(api_url, api_key, path)
+    json.dump(clean_response(raw), sys.stdout)
 
 
 main()
