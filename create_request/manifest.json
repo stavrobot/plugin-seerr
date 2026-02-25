@@ -1,0 +1,23 @@
+{
+  "name": "create_request",
+  "description": "Request a movie or TV show to be added to the library.",
+  "entrypoint": "run.py",
+  "parameters": {
+    "media_type": {
+      "type": "string",
+      "description": "Type of media: 'movie' or 'tv'."
+    },
+    "media_id": {
+      "type": "integer",
+      "description": "TMDB ID of the movie or TV show."
+    },
+    "is_4k": {
+      "type": "boolean",
+      "description": "Whether to request the 4K version. Defaults to false."
+    },
+    "seasons": {
+      "type": "string",
+      "description": "Comma-separated season numbers to request (TV only, e.g. '1,2,3'). Required for TV shows."
+    }
+  }
+}

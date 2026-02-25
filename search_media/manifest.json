@@ -1,0 +1,15 @@
+{
+  "name": "search_media",
+  "description": "Search for movies, TV shows, and people.",
+  "entrypoint": "run.py",
+  "parameters": {
+    "query": {
+      "type": "string",
+      "description": "The search query."
+    },
+    "page": {
+      "type": "integer",
+      "description": "Page number for results."
+    }
+  }
+}

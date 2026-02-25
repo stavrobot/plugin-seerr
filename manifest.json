@@ -1,0 +1,14 @@
+{
+  "name": "seerr",
+  "description": "Search for and request movies and TV shows via seerr.",
+  "config": {
+    "api_url": {
+      "description": "Seerr instance base URL (e.g. http://localhost:5055)",
+      "required": true
+    },
+    "api_key": {
+      "description": "Seerr API key (Settings > General in the seerr UI)",
+      "required": true
+    }
+  }
+}
