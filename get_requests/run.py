@@ -77,12 +77,19 @@ def clean_result(raw: dict, title: str | None) -> dict:
     return cleaned
 
 
+KNOWN_PARAMS = {"filter", "media_type", "take", "skip"}
+
+
 def main() -> None:
     config = json.loads(Path("../config.json").read_text())
     api_url = config["api_url"].rstrip("/")
     api_key = config["api_key"]
 
     params = json.load(sys.stdin)
+    unknown = set(params) - KNOWN_PARAMS
+    if unknown:
+        print(f"Unknown parameters: {', '.join(sorted(unknown))}", file=sys.stderr)
+        sys.exit(1)
     filter_status = params.get("filter", "all")
     media_type = params.get("media_type")
     take = params.get("take", 20)

@@ -87,12 +87,19 @@ def clean_response(raw: dict) -> dict:
     }
 
 
+KNOWN_PARAMS = {"query", "page"}
+
+
 def main() -> None:
     config = json.loads(Path("../config.json").read_text())
     api_url = config["api_url"].rstrip("/")
     api_key = config["api_key"]
 
     params = json.load(sys.stdin)
+    unknown = set(params) - KNOWN_PARAMS
+    if unknown:
+        print(f"Unknown parameters: {', '.join(sorted(unknown))}", file=sys.stderr)
+        sys.exit(1)
     query = params["query"]
     page = params.get("page", 1)
 

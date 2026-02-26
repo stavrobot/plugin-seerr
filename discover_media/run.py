@@ -169,12 +169,19 @@ def build_path(params: dict) -> str:
     return f"/api/v1/discover/tv?{query_string}"
 
 
+KNOWN_PARAMS = {"category", "genre", "network", "studio", "language", "sort_by", "page"}
+
+
 def main() -> None:
     config = json.loads(Path("../config.json").read_text())
     api_url = config["api_url"].rstrip("/")
     api_key = config["api_key"]
 
     params = json.load(sys.stdin)
+    unknown = set(params) - KNOWN_PARAMS
+    if unknown:
+        print(f"Unknown parameters: {', '.join(sorted(unknown))}", file=sys.stderr)
+        sys.exit(1)
 
     path = build_path(params)
     raw = call_seerr_api(api_url, api_key, path)

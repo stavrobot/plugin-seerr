@@ -66,12 +66,19 @@ def fetch_title(api_url: str, api_key: str, media_type: str, tmdb_id: int) -> st
         return None
 
 
+KNOWN_PARAMS = {"media_type", "media_id", "is_4k", "seasons"}
+
+
 def main() -> None:
     config = json.loads(Path("../config.json").read_text())
     api_url = config["api_url"].rstrip("/")
     api_key = config["api_key"]
 
     params = json.load(sys.stdin)
+    unknown = set(params) - KNOWN_PARAMS
+    if unknown:
+        print(f"Unknown parameters: {', '.join(sorted(unknown))}", file=sys.stderr)
+        sys.exit(1)
     media_type = params["media_type"]
     media_id = params["media_id"]
     is_4k = params.get("is_4k", False)
