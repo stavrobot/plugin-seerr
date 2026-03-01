@@ -1,6 +1,6 @@
 {
   "name": "discover_media",
-  "description": "Discover trending, upcoming, and popular movies and TV shows. Supports filtering by genre, network, studio, and language.",
+  "description": "Discover trending, upcoming, and popular movies and TV shows. Supports filtering by genre, network, studio, language, year, rating, and runtime.",
   "entrypoint": "run.py",
   "parameters": {
     "category": {
@@ -21,15 +21,47 @@
     },
     "language": {
       "type": "string",
-      "description": "ISO 639-1 language code to filter by (for 'movies' category only, e.g. 'ko', 'en')."
+      "description": "ISO 639-1 language code to filter by (for 'movies' or 'tv' categories, e.g. 'ko', 'en')."
     },
     "sort_by": {
       "type": "string",
-      "description": "Sort criteria for 'movies' category (e.g. 'popularity.desc')."
+      "description": "Sort criteria for 'movies' or 'tv' category (e.g. 'popularity.desc')."
     },
     "page": {
       "type": "integer",
       "description": "Page number for results."
+    },
+    "primary_release_date_gte": {
+      "type": "string",
+      "description": "Earliest release date for movies (ISO date, e.g. '2020-01-01')."
+    },
+    "primary_release_date_lte": {
+      "type": "string",
+      "description": "Latest release date for movies (ISO date, e.g. '2025-12-31')."
+    },
+    "first_air_date_gte": {
+      "type": "string",
+      "description": "Earliest first air date for TV shows (ISO date, e.g. '2020-01-01')."
+    },
+    "first_air_date_lte": {
+      "type": "string",
+      "description": "Latest first air date for TV shows (ISO date, e.g. '2025-12-31')."
+    },
+    "vote_average_gte": {
+      "type": "number",
+      "description": "Minimum vote average (0-10)."
+    },
+    "vote_average_lte": {
+      "type": "number",
+      "description": "Maximum vote average (0-10)."
+    },
+    "runtime_gte": {
+      "type": "integer",
+      "description": "Minimum runtime in minutes."
+    },
+    "runtime_lte": {
+      "type": "integer",
+      "description": "Maximum runtime in minutes."
     }
   }
 }

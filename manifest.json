@@ -1,6 +1,6 @@
 {
   "name": "seerr",
-  "description": "Search for and request movies and TV shows via seerr.",
+  "description": "Search for, discover, and request movies and TV shows via Seerr. Browse trending, popular, and upcoming titles with filtering by genre, year, rating, and more.",
   "config": {
     "api_url": {
       "description": "Seerr instance base URL (e.g. http://localhost:5055)",

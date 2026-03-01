@@ -119,57 +119,71 @@ def build_path(params: dict) -> str:
         return f"/api/v1/discover/tv/upcoming?{query_string}"
 
     if category == "movies":
-        genre = params.get("genre")
-        studio = params.get("studio")
-        language = params.get("language")
-        sort_by = params.get("sort_by")
-
-        if genre is not None:
-            query_string = urllib.parse.urlencode(
-                {"page": page}, quote_via=urllib.parse.quote
-            )
-            return f"/api/v1/discover/movies/genre/{genre}?{query_string}"
-
-        if studio is not None:
-            query_string = urllib.parse.urlencode(
-                {"page": page}, quote_via=urllib.parse.quote
-            )
-            return f"/api/v1/discover/movies/studio/{studio}?{query_string}"
-
-        if language is not None:
-            query_string = urllib.parse.urlencode(
-                {"page": page}, quote_via=urllib.parse.quote
-            )
-            return f"/api/v1/discover/movies/language/{language}?{query_string}"
-
-        query_params: dict = {"page": page}
-        if sort_by is not None:
-            query_params["sortBy"] = sort_by
+        # Require a minimum vote count to filter out obscure titles that skew
+        # rating-based sorting with a handful of perfect scores.
+        query_params: dict = {"page": page, "voteCountGte": 200}
+        for plugin_param, overseerr_param in [
+            ("genre", "genre"),
+            ("studio", "studio"),
+            ("language", "language"),
+            ("sort_by", "sortBy"),
+            ("primary_release_date_gte", "primaryReleaseDateGte"),
+            ("primary_release_date_lte", "primaryReleaseDateLte"),
+            ("vote_average_gte", "voteAverageGte"),
+            ("vote_average_lte", "voteAverageLte"),
+            ("runtime_gte", "withRuntimeGte"),
+            ("runtime_lte", "withRuntimeLte"),
+        ]:
+            value = params.get(plugin_param)
+            if value is not None:
+                query_params[overseerr_param] = value
         query_string = urllib.parse.urlencode(
             query_params, quote_via=urllib.parse.quote
         )
         return f"/api/v1/discover/movies?{query_string}"
 
     # All other categories have returned above, so only "tv" remains.
-    network = params.get("network")
-    genre = params.get("genre")
-
-    if network is not None:
-        query_string = urllib.parse.urlencode(
-            {"page": page}, quote_via=urllib.parse.quote
-        )
-        return f"/api/v1/discover/tv/network/{network}?{query_string}"
-
-    query_params = {"page": page}
-    if genre is not None:
-        query_params["genre"] = genre
+    # Require a minimum vote count to filter out obscure titles that skew
+    # rating-based sorting with a handful of perfect scores.
+    query_params = {"page": page, "voteCountGte": 200}
+    for plugin_param, overseerr_param in [
+        ("genre", "genre"),
+        ("network", "network"),
+        ("language", "language"),
+        ("sort_by", "sortBy"),
+        ("first_air_date_gte", "firstAirDateGte"),
+        ("first_air_date_lte", "firstAirDateLte"),
+        ("vote_average_gte", "voteAverageGte"),
+        ("vote_average_lte", "voteAverageLte"),
+        ("runtime_gte", "withRuntimeGte"),
+        ("runtime_lte", "withRuntimeLte"),
+    ]:
+        value = params.get(plugin_param)
+        if value is not None:
+            query_params[overseerr_param] = value
     query_string = urllib.parse.urlencode(
         query_params, quote_via=urllib.parse.quote
     )
     return f"/api/v1/discover/tv?{query_string}"
 
 
-KNOWN_PARAMS = {"category", "genre", "network", "studio", "language", "sort_by", "page"}
+KNOWN_PARAMS = {
+    "category",
+    "genre",
+    "network",
+    "studio",
+    "language",
+    "sort_by",
+    "page",
+    "primary_release_date_gte",
+    "primary_release_date_lte",
+    "first_air_date_gte",
+    "first_air_date_lte",
+    "vote_average_gte",
+    "vote_average_lte",
+    "runtime_gte",
+    "runtime_lte",
+}
 
 
 def main() -> None:
