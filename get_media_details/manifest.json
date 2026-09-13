@@ -1,0 +1,15 @@
+{
+  "name": "get_media_details",
+  "description": "Get details for a movie or TV show by TMDB id, including which seasons exist and which of them are already available.",
+  "entrypoint": "run.py",
+  "parameters": {
+    "media_type": {
+      "type": "string",
+      "description": "Type of media: 'movie' or 'tv'."
+    },
+    "media_id": {
+      "type": "integer",
+      "description": "TMDB ID of the movie or TV show, as returned by search_media or discover_media."
+    }
+  }
+}

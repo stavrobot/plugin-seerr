@@ -1,2 +1,6 @@
 __pycache__/
 config.json
+.seerr_session_cookie
+*.har
+PLUGIN.md
+.tickets/

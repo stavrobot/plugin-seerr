@@ -5,35 +5,14 @@
 
 import json
 import sys
-import urllib.error
 import urllib.parse
-import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from seerr_client import MediaStatus, SeerrClient
+
 VALID_CATEGORIES = {"trending", "movies", "movies_upcoming", "tv", "tv_upcoming"}
-
-
-def call_seerr_api(api_url: str, api_key: str, path: str) -> dict:
-    request = urllib.request.Request(
-        f"{api_url}{path}",
-        headers={"X-Api-Key": api_key},
-    )
-    try:
-        with urllib.request.urlopen(request) as response:
-            return json.loads(response.read())
-    except urllib.error.HTTPError as error:
-        body = error.read().decode()
-        json.dump({"error": f"HTTP {error.code}: {body}"}, sys.stderr)
-        sys.exit(1)
-
-
-MEDIA_STATUS_CODES: dict[int, str] = {
-    1: "unknown",
-    2: "pending",
-    3: "processing",
-    4: "partially_available",
-    5: "available",
-}
 
 
 def clean_result(result: dict) -> dict:
@@ -73,7 +52,7 @@ def clean_result(result: dict) -> dict:
     if media_info is not None:
         status_code = media_info.get("status")
         if status_code is not None:
-            cleaned["status"] = MEDIA_STATUS_CODES.get(
+            cleaned["status"] = MediaStatus.get(
                 status_code, f"unknown ({status_code})"
             )
 
@@ -187,10 +166,6 @@ KNOWN_PARAMS = {
 
 
 def main() -> None:
-    config = json.loads(Path("../config.json").read_text())
-    api_url = config["api_url"].rstrip("/")
-    api_key = config["api_key"]
-
     params = json.load(sys.stdin)
     unknown = set(params) - KNOWN_PARAMS
     if unknown:
@@ -198,7 +173,8 @@ def main() -> None:
         sys.exit(1)
 
     path = build_path(params)
-    raw = call_seerr_api(api_url, api_key, path)
+    client = SeerrClient.from_config()
+    raw = client.get(path)
     json.dump(clean_response(raw), sys.stdout)
 
 

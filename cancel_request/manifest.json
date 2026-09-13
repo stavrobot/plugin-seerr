@@ -1,0 +1,11 @@
+{
+  "name": "cancel_request",
+  "description": "Cancel one of your own pending media requests. Seerr only permits deleting a request while it is still pending; an approved request, including one auto-approved on creation, fails with HTTP 401 and can only be removed by an instance administrator.",
+  "entrypoint": "run.py",
+  "parameters": {
+    "request_id": {
+      "type": "integer",
+      "description": "The request id (from get_requests or create_request), not the TMDB media id."
+    }
+  }
+}

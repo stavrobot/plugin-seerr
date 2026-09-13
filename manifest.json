@@ -6,8 +6,12 @@
       "description": "Seerr instance base URL (e.g. http://localhost:5055)",
       "required": true
     },
-    "api_key": {
-      "description": "Seerr API key (Settings > General in the seerr UI)",
+    "jellyfin_username": {
+      "description": "Jellyfin or Emby username to sign in with",
+      "required": true
+    },
+    "jellyfin_password": {
+      "description": "Jellyfin or Emby password to sign in with",
       "required": true
     }
   }
