@@ -1,6 +1,7 @@
 {
   "name": "seerr",
   "description": "Discover and request movies and TV shows via Seerr.",
+  "summary": "Discover and request movies and TV shows via Seerr",
   "config": {
     "api_url": {
       "description": "Seerr instance base URL (e.g. http://localhost:5055)",
